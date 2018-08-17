@@ -1,21 +1,37 @@
 package main
 
 import (
+	"log"
 	"math"
+	"net/http"
 	"strconv"
+	"strings"
 )
 
 func main() {
+	http.HandleFunc("/sum", handleSum)
+	log.Fatal(http.ListenAndServe(":8081", nil))
+}
 
+func handleSum(w http.ResponseWriter, r *http.Request) {
+	a := r.URL.Query()["a"]
+	b := r.URL.Query()["b"]
+
+	log.Printf("a = %s", a)
+	log.Printf("b = %s", b)
+	sum := sum(strings.Join(a, ""), strings.Join(b, ""))
+	log.Printf("sum = %s", sum)
+
+	w.Write([]byte(sum))
 }
 
 func sum(a string, b string) string {
 	if len(a) > len(b) {
-		for i := 0; i < int(math.Abs(float64(len(a)-len(b)))); i++ {
+		for i := 0; i <= int(math.Abs(float64(len(a)-len(b)))); i++ {
 			b = "0" + b
 		}
 	} else if len(a) < len(b) {
-		for i := 0; i < int(math.Abs(float64(len(a)-len(b)))); i++ {
+		for i := 0; i <= int(math.Abs(float64(len(b)-len(a)))); i++ {
 			a = "0" + a
 		}
 	}
@@ -38,13 +54,6 @@ func sum(a string, b string) string {
 	}
 
 	if carry > 0 {
-		// if int(ret[0]-'0') != 0 {
-		// 	digit = carry + int(ret[0]-'0')
-		// 	panic(ret)
-		// 	ret = strconv.Itoa(digit) + ret[1:]
-		// } else {
-		// 	ret = strconv.Itoa(carry) + ret[0:]
-		// }
 		ret = strconv.Itoa(carry) + ret[0:]
 	}
 

@@ -75,3 +75,11 @@ func Test989Plus989Equals1978(t *testing.T) {
 		t.Errorf("Sum was incorrect, got %s, want %s", res, "1978")
 	}
 }
+
+func Test232Plus2Equals234(t *testing.T) {
+	res := sum("232", "2")
+
+	if res != "234" {
+		t.Errorf("Sum was incorrect, got %s, want %s", res, "234")
+	}
+}
